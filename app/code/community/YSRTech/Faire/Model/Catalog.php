@@ -110,6 +110,21 @@ class YSRTech_Faire_Model_Catalog
 
     public function syncProduct($productId, ?array $link = null)
     {
+        try {
+            $this->_syncProduct($productId, $link);
+        } catch (YSRTech_Faire_Model_Api_Exception $e) {
+            // deleted on Faire: forget the link and create the product again
+            if ($e->getCode() !== 404 || !$link || !$link['faire_product_id']) {
+                throw $e;
+            }
+            $this->_say("product {$productId}: {$link['faire_product_id']} no longer exists on Faire, creating it again");
+            $this->_saveLink($productId, ['faire_product_id' => null, 'variants' => null, 'payload_hash' => null, 'images_hash' => null, 'status' => 'pending']);
+            $this->_syncProduct($productId, null);
+        }
+    }
+
+    protected function _syncProduct($productId, ?array $link = null)
+    {
         $product = $this->_loadProduct($productId);
         $payload = $this->buildPayload($product);
         $images = $payload['images'] ?? [];
@@ -303,22 +318,25 @@ class YSRTech_Faire_Model_Catalog
     protected function _variant(Mage_Catalog_Model_Product $child, array $options, Mage_Catalog_Model_Product $parent)
     {
         $helper = $this->_helper();
-        [$wholesale, $retail, $currency] = $this->getPrices($child);
-        $price = [
-            'wholesale_price' => ['amount_minor' => $helper->toMinor($wholesale), 'currency' => $currency],
-            'retail_price'    => ['amount_minor' => $helper->toMinor($retail), 'currency' => $currency],
-        ];
-        $region = (string) $helper->getConfig('catalog/price_region', $this->_website);
-        if ($region === 'USA') {
-            $price['geo_constraint'] = ['country' => 'USA'];
-        } elseif ($region === 'EUROPEAN_UNION') {
-            $price['geo_constraint'] = ['country_group' => 'EUROPEAN_UNION'];
+        $prices = [];
+        foreach ($this->getPriceLists() as [$store, $region]) {
+            [$wholesale, $retail, $currency] = $this->getPrices($child, $store);
+            $price = [
+                'wholesale_price' => ['amount_minor' => $helper->toMinor($wholesale), 'currency' => $currency],
+                'retail_price'    => ['amount_minor' => $helper->toMinor($retail), 'currency' => $currency],
+            ];
+            if ($region === 'USA') {
+                $price['geo_constraint'] = ['country' => 'USA'];
+            } elseif ($region === 'EUROPEAN_UNION') {
+                $price['geo_constraint'] = ['country_group' => 'EUROPEAN_UNION'];
+            }
+            $prices[] = $price;
         }
         $variant = [
             'idempotence_token' => 'om-w' . $this->_website->getId() . '-v' . $child->getId(),
             'sku'               => (string) $child->getSku(),
             'options'           => $options,
-            'prices'            => [$price],
+            'prices'            => $prices,
         ];
         if ($child->getId() !== $parent->getId()) {
             $variant['name'] = mb_substr((string) $child->getName(), 0, 255);
@@ -341,11 +359,13 @@ class YSRTech_Faire_Model_Catalog
      *
      * @return array [wholesale, retail, currency]
      */
-    public function getPrices(Mage_Catalog_Model_Product $product)
+    public function getPrices(Mage_Catalog_Model_Product $product, ?Mage_Core_Model_Store $store = null)
     {
         $helper = $this->_helper();
-        $priceStoreId = (int) $helper->getConfig('catalog/price_store', $this->_website) ?: (int) $helper->getContentStore($this->_website)->getId();
-        $store = Mage::app()->getStore($priceStoreId);
+        if (!$store) {
+            $priceStoreId = (int) $helper->getConfig('catalog/price_store', $this->_website) ?: (int) $helper->getContentStore($this->_website)->getId();
+            $store = Mage::app()->getStore($priceStoreId);
+        }
         $priced = Mage::getModel('catalog/product')->setStoreId($store->getId())->load($product->getId());
         $retail = (float) $priced->getPrice();
         if ($helper->getConfig('catalog/retail_source', $this->_website) === 'msrp' && (float) $priced->getMsrp() > 0) {
@@ -368,6 +388,37 @@ class YSRTech_Faire_Model_Catalog
             Mage::throwException('No price for ' . $product->getSku() . '.');
         }
         return [$wholesale, $retail, $store->getBaseCurrencyCode()];
+    }
+
+    /**
+     * The price lists sent with every variant: [store view, region]. The main one ("Prices
+     * from Store View", "Price Region"), plus one per line of "Prices per Region"
+     * (REGION => store view code), each in its store view's website prices and base currency.
+     *
+     * @return array[]
+     */
+    public function getPriceLists()
+    {
+        $helper = $this->_helper();
+        $mainId = (int) $helper->getConfig('catalog/price_store', $this->_website) ?: (int) $helper->getContentStore($this->_website)->getId();
+        $mainRegion = (string) $helper->getConfig('catalog/price_region', $this->_website);
+        $lists = [$mainRegion => [Mage::app()->getStore($mainId), $mainRegion]];
+        foreach (preg_split('/\r?\n/', (string) $helper->getConfig('catalog/regional_prices', $this->_website)) as $line) {
+            if (strpos($line, '=>') === false) {
+                continue;
+            }
+            [$region, $storeCode] = array_map('trim', explode('=>', $line, 2));
+            $region = strtoupper($region);
+            if (!in_array($region, ['USA', 'EUROPEAN_UNION'], true)) {
+                Mage::throwException('Prices per Region: unknown region "' . $region . '" (USA or EUROPEAN_UNION).');
+            }
+            try {
+                $lists[$region] = [Mage::app()->getStore($storeCode), $region];   // a region once
+            } catch (Exception $e) {
+                Mage::throwException('Prices per Region: store view "' . $storeCode . '" does not exist.');
+            }
+        }
+        return array_values($lists);
     }
 
     /**

@@ -101,6 +101,7 @@
                 <api_url>https://www.faire.com/external-api/v2</api_url>
             </api>
             <catalog>
+                <enabled>1</enabled>
                 <wholesale_percent>50</wholesale_percent>
                 <retail_source>price</retail_source>
                 <case_size>1</case_size>

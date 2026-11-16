@@ -46,7 +46,9 @@ class YSRTech_Faire_Model_Cron
     public function products()
     {
         $this->_each('products', function ($website) {
-            Mage::getModel('ysrtech_faire/catalog')->setWebsite($website)->sync();
+            if (Mage::helper('ysrtech_faire')->getFlag('catalog/enabled', $website)) {
+                Mage::getModel('ysrtech_faire/catalog')->setWebsite($website)->sync();
+            }
         });
     }
 }

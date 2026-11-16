@@ -12,6 +12,27 @@ website: each brand connects its own Faire account.
 | Cancellations | Faire → OpenMage | with the orders |
 | Tracking numbers | OpenMage → Faire | every 20 minutes |
 
+## Switches
+
+Each direction has its own switch (per website): **Send Products**, **Send Stock Levels**,
+**Import Orders**, **Send Tracking Numbers**. Off stops the scheduled runs and the buttons /
+shell commands alike (a `--dry-run` still shows what would be sent).
+
+## Currencies
+
+Nothing is converted on the way to Faire:
+
+- **Main prices**: "Prices from Store View": that website's prices, in its base currency
+  (Slim Syrups CA: CAD), optionally limited to a "Price Region".
+- **Prices per Region**: extra price lists, one per line, `REGION => store view code` with region
+  `USA` or `EUROPEAN_UNION`. `USA => us_en` adds the US website's USD prices for US retailers,
+  next to the CAD prices. Wholesale prices follow the same rules (product override, customer
+  group, percentage) in each list.
+
+Orders coming back carry the currency the retailer paid in: "Store Views by Currency"
+(`USD => us_en`) places them in the store view of that currency at Faire's prices; other
+currencies go to "Store View for Orders", converted with the currency rates.
+
 ## Products
 
 Products with **Sell on Faire** = Yes (product page, Faire tab; or the Manage Products mass

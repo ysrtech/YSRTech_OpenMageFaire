@@ -20,6 +20,11 @@ class YSRTech_Faire_Model_Runner
         if (!$helper->hasCredentials($website)) {
             return ['No Faire credentials for website ' . $website->getCode() . '.'];
         }
+        $switches = ['products' => 'catalog/enabled', 'inventory' => 'inventory/enabled', 'orders' => 'orders/enabled', 'shipments' => 'shipments/enabled'];
+        $names = ['products' => 'Send Products', 'inventory' => 'Send Stock Levels', 'orders' => 'Import Orders', 'shipments' => 'Send Tracking Numbers'];
+        if (isset($switches[$type]) && !$dryRun && !$helper->getFlag($switches[$type], $website)) {
+            return [sprintf('"%s" is turned off for %s (System > Configuration > YSRTech > Faire). A dry run still shows what would be sent.', $names[$type], $website->getCode())];
+        }
         switch ($type) {
             case 'test':
                 $profile = Mage::getModel('ysrtech_faire/api')->setWebsite($website)->get('brands/profile');

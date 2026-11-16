@@ -109,6 +109,16 @@
                     <show_in_website>1</show_in_website>
                     <show_in_store>0</show_in_store>
                     <fields>
+                        <enabled translate="label comment">
+                            <label>Send Products</label>
+                            <frontend_type>select</frontend_type>
+                            <source_model>adminhtml/system_config_source_yesno</source_model>
+                            <comment><![CDATA[Off: no product is created, changed or paused on Faire (nightly run and "Send Products").]]></comment>
+                            <sort_order>5</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>0</show_in_store>
+                        </enabled>
                         <store translate="label comment">
                             <label>Content from Store View</label>
                             <frontend_type>select</frontend_type>
@@ -139,6 +149,15 @@
                             <show_in_website>1</show_in_website>
                             <show_in_store>0</show_in_store>
                         </price_region>
+                        <regional_prices translate="label comment">
+                            <label>Prices per Region</label>
+                            <frontend_type>textarea</frontend_type>
+                            <comment><![CDATA[Extra price lists, one per line: <strong>REGION => store view code</strong>, region USA or EUROPEAN_UNION. Example: <strong>USA => us_en</strong> sends the US website's prices in USD for US retailers, next to the main prices (CAD). Each list uses its store view's website prices and base currency; nothing is converted.]]></comment>
+                            <sort_order>27</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>0</show_in_store>
+                        </regional_prices>
                         <wholesale_group translate="label comment">
                             <label>Wholesale Price from Customer Group</label>
                             <frontend_type>select</frontend_type>
@@ -236,6 +255,7 @@
                         <enabled translate="label comment">
                             <label>Send Stock Levels</label>
                             <frontend_type>select</frontend_type>
+                            <comment><![CDATA[Off: stock is not sent (every 15 minutes and "Send Stock").]]></comment>
                             <source_model>adminhtml/system_config_source_yesno</source_model>
                             <sort_order>10</sort_order>
                             <show_in_default>1</show_in_default>
@@ -271,6 +291,7 @@
                         <enabled translate="label comment">
                             <label>Import Orders</label>
                             <frontend_type>select</frontend_type>
+                            <comment><![CDATA[Off: no order is imported, accepted or canceled (every 10 minutes and "Import Orders").]]></comment>
                             <source_model>adminhtml/system_config_source_yesno</source_model>
                             <sort_order>10</sort_order>
                             <show_in_default>1</show_in_default>
@@ -364,6 +385,7 @@
                         <enabled translate="label comment">
                             <label>Send Tracking Numbers</label>
                             <frontend_type>select</frontend_type>
+                            <comment><![CDATA[Off: tracking numbers stay in OpenMage (every 20 minutes and "Send Tracking").]]></comment>
                             <source_model>adminhtml/system_config_source_yesno</source_model>
                             <sort_order>10</sort_order>
                             <show_in_default>1</show_in_default>
