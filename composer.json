@@ -1,0 +1,15 @@
+{
+    "name": "ysrtech/faire",
+    "description": "OpenMage: sell on Faire (wholesale marketplace) through the Faire External API v2: products and prices, stock levels, order import and acceptance, tracking numbers.",
+    "type": "magento-module",
+    "license": "MIT",
+    "require": {
+        "magento-hackathon/magento-composer-installer": "*"
+    },
+    "extra": {
+        "map": [
+            ["app", "app"],
+            ["shell/ysrtech_faire.php", "shell/ysrtech_faire.php"]
+        ]
+    }
+}

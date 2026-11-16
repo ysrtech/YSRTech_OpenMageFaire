@@ -1,0 +1,14 @@
+<?xml version="1.0"?>
+<config>
+    <modules>
+        <YSRTech_Faire>
+            <active>true</active>
+            <codePool>community</codePool>
+            <depends>
+                <Mage_Catalog/>
+                <Mage_Sales/>
+                <Mage_CatalogInventory/>
+            </depends>
+        </YSRTech_Faire>
+    </modules>
+</config>

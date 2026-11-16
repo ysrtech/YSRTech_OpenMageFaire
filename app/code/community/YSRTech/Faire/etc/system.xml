@@ -1,0 +1,387 @@
+<?xml version="1.0"?>
+<config>
+    <tabs>
+        <ysrtech translate="label" module="ysrtech_faire">
+            <label>YSRTech</label>
+            <sort_order>150</sort_order>
+        </ysrtech>
+    </tabs>
+    <sections>
+        <ysrtech_faire translate="label" module="ysrtech_faire">
+            <label>Faire</label>
+            <tab>ysrtech</tab>
+            <frontend_type>text</frontend_type>
+            <sort_order>60</sort_order>
+            <show_in_default>1</show_in_default>
+            <show_in_website>1</show_in_website>
+            <show_in_store>0</show_in_store>
+            <groups>
+                <api translate="label">
+                    <label>Connection</label>
+                    <sort_order>10</sort_order>
+                    <show_in_default>1</show_in_default>
+                    <show_in_website>1</show_in_website>
+                    <show_in_store>0</show_in_store>
+                    <fields>
+                        <enabled translate="label comment">
+                            <label>Enabled</label>
+                            <frontend_type>select</frontend_type>
+                            <source_model>adminhtml/system_config_source_yesno</source_model>
+                            <comment><![CDATA[Set it on the website of the brand that sells on Faire (each brand has its own Faire account).]]></comment>
+                            <sort_order>10</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>0</show_in_store>
+                        </enabled>
+                        <auth translate="label comment">
+                            <label>Authentication</label>
+                            <frontend_type>select</frontend_type>
+                            <source_model>ysrtech_faire/source_auth</source_model>
+                            <comment><![CDATA[A brand access token from Faire (Brand portal > Settings > Integrations, or Faire's API team), or an OAuth app.]]></comment>
+                            <sort_order>20</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>0</show_in_store>
+                        </auth>
+                        <access_token translate="label comment">
+                            <label>Access Token</label>
+                            <frontend_type>obscure</frontend_type>
+                            <backend_model>adminhtml/system_config_backend_encrypted</backend_model>
+                            <comment><![CDATA[Stored encrypted.]]></comment>
+                            <sort_order>30</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>0</show_in_store>
+                        </access_token>
+                        <app_id translate="label comment">
+                            <label>OAuth Application ID</label>
+                            <frontend_type>obscure</frontend_type>
+                            <backend_model>adminhtml/system_config_backend_encrypted</backend_model>
+                            <sort_order>40</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>0</show_in_store>
+                        </app_id>
+                        <app_secret translate="label comment">
+                            <label>OAuth Application Secret</label>
+                            <frontend_type>obscure</frontend_type>
+                            <backend_model>adminhtml/system_config_backend_encrypted</backend_model>
+                            <sort_order>50</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>0</show_in_store>
+                        </app_secret>
+                        <oauth_token translate="label comment">
+                            <label>OAuth Access Token</label>
+                            <frontend_type>obscure</frontend_type>
+                            <backend_model>adminhtml/system_config_backend_encrypted</backend_model>
+                            <sort_order>60</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>0</show_in_store>
+                        </oauth_token>
+                        <api_url translate="label comment">
+                            <label>API URL</label>
+                            <frontend_type>text</frontend_type>
+                            <comment><![CDATA[https://www.faire.com/external-api/v2]]></comment>
+                            <sort_order>70</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>0</show_in_store>
+                        </api_url>
+                        <actions translate="label comment">
+                            <label>Actions</label>
+                            <frontend_type>label</frontend_type>
+                            <frontend_model>ysrtech_faire/adminhtml_system_config_actions</frontend_model>
+                            <comment><![CDATA[Choose the website scope first. Product changes are sent every night, stock every 15 minutes, orders every 10 minutes, tracking every 20 minutes.]]></comment>
+                            <sort_order>80</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>0</show_in_store>
+                        </actions>
+                    </fields>
+                </api>
+                <catalog translate="label">
+                    <label>Products</label>
+                    <comment><![CDATA[Products with <strong>Sell on Faire</strong> = Yes (product edit page, Faire tab, or the Catalog > Manage Products mass action).]]></comment>
+                    <sort_order>20</sort_order>
+                    <show_in_default>1</show_in_default>
+                    <show_in_website>1</show_in_website>
+                    <show_in_store>0</show_in_store>
+                    <fields>
+                        <store translate="label comment">
+                            <label>Content from Store View</label>
+                            <frontend_type>select</frontend_type>
+                            <source_model>ysrtech_faire/source_store</source_model>
+                            <comment><![CDATA[Names, descriptions and images.]]></comment>
+                            <sort_order>10</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>0</show_in_store>
+                        </store>
+                        <price_store translate="label comment">
+                            <label>Prices from Store View</label>
+                            <frontend_type>select</frontend_type>
+                            <source_model>ysrtech_faire/source_store</source_model>
+                            <comment><![CDATA[Its website's prices and base currency (e.g. the US website for prices in USD). Empty: the content store view.]]></comment>
+                            <sort_order>20</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>0</show_in_store>
+                        </price_store>
+                        <price_region translate="label comment">
+                            <label>Price Region</label>
+                            <frontend_type>select</frontend_type>
+                            <source_model>ysrtech_faire/source_region</source_model>
+                            <comment><![CDATA[Faire prices can be limited to a region; leave empty for the brand's default prices unless Faire asks for a region.]]></comment>
+                            <sort_order>25</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>0</show_in_store>
+                        </price_region>
+                        <wholesale_group translate="label comment">
+                            <label>Wholesale Price from Customer Group</label>
+                            <frontend_type>select</frontend_type>
+                            <source_model>ysrtech_faire/source_group</source_model>
+                            <comment><![CDATA[The group's price (group / tier price) is the Faire wholesale price. "Faire Wholesale Price" on the product wins over it.]]></comment>
+                            <sort_order>30</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>0</show_in_store>
+                        </wholesale_group>
+                        <wholesale_percent translate="label comment">
+                            <label>Wholesale Price as % of Retail</label>
+                            <frontend_type>text</frontend_type>
+                            <comment><![CDATA[When neither of the above gives a price, e.g. 50 for keystone pricing.]]></comment>
+                            <sort_order>40</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>0</show_in_store>
+                        </wholesale_percent>
+                        <retail_source translate="label comment">
+                            <label>Retail Price</label>
+                            <frontend_type>select</frontend_type>
+                            <source_model>ysrtech_faire/source_retailSource</source_model>
+                            <comment><![CDATA[The suggested retail price shown to retailers.]]></comment>
+                            <sort_order>50</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>0</show_in_store>
+                        </retail_source>
+                        <case_size translate="label comment">
+                            <label>Case Size</label>
+                            <frontend_type>text</frontend_type>
+                            <comment><![CDATA[Units per case (retailers order in multiples); "Faire Case Size" on the product wins.]]></comment>
+                            <sort_order>60</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>0</show_in_store>
+                        </case_size>
+                        <minimum_quantity translate="label comment">
+                            <label>Minimum Order Quantity</label>
+                            <frontend_type>text</frontend_type>
+                            <comment><![CDATA[Units per product, rounded up to whole cases.]]></comment>
+                            <sort_order>70</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>0</show_in_store>
+                        </minimum_quantity>
+                        <taxonomy_type translate="label comment">
+                            <label>Faire Product Type</label>
+                            <frontend_type>text</frontend_type>
+                            <comment><![CDATA[Faire taxonomy type id (tt_...) for products without "Faire Product Type"; Faire needs one to publish.]]></comment>
+                            <sort_order>80</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>0</show_in_store>
+                        </taxonomy_type>
+                        <made_in translate="label comment">
+                            <label>Made in</label>
+                            <frontend_type>select</frontend_type>
+                            <source_model>adminhtml/system_config_source_country</source_model>
+                            <comment><![CDATA[When the product has no "Country of Manufacture".]]></comment>
+                            <sort_order>90</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>0</show_in_store>
+                        </made_in>
+                        <gtin_attribute translate="label comment">
+                            <label>GTIN / UPC Attribute</label>
+                            <frontend_type>text</frontend_type>
+                            <comment><![CDATA[Attribute code of the barcode number.]]></comment>
+                            <sort_order>100</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>0</show_in_store>
+                        </gtin_attribute>
+                        <publish translate="label comment">
+                            <label>Publish New Products</label>
+                            <frontend_type>select</frontend_type>
+                            <source_model>adminhtml/system_config_source_yesno</source_model>
+                            <comment><![CDATA[No: new products are created as drafts on Faire, to review there first.]]></comment>
+                            <sort_order>110</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>0</show_in_store>
+                        </publish>
+                    </fields>
+                </catalog>
+                <inventory translate="label">
+                    <label>Stock</label>
+                    <sort_order>30</sort_order>
+                    <show_in_default>1</show_in_default>
+                    <show_in_website>1</show_in_website>
+                    <show_in_store>0</show_in_store>
+                    <fields>
+                        <enabled translate="label comment">
+                            <label>Send Stock Levels</label>
+                            <frontend_type>select</frontend_type>
+                            <source_model>adminhtml/system_config_source_yesno</source_model>
+                            <sort_order>10</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>0</show_in_store>
+                        </enabled>
+                        <buffer translate="label comment">
+                            <label>Safety Buffer</label>
+                            <frontend_type>text</frontend_type>
+                            <comment><![CDATA[Units kept back from Faire per SKU.]]></comment>
+                            <sort_order>20</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>0</show_in_store>
+                        </buffer>
+                        <unmanaged_qty translate="label comment">
+                            <label>Quantity when Stock is not Managed</label>
+                            <frontend_type>text</frontend_type>
+                            <sort_order>30</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>0</show_in_store>
+                        </unmanaged_qty>
+                    </fields>
+                </inventory>
+                <orders translate="label">
+                    <label>Orders</label>
+                    <sort_order>40</sort_order>
+                    <show_in_default>1</show_in_default>
+                    <show_in_website>1</show_in_website>
+                    <show_in_store>0</show_in_store>
+                    <fields>
+                        <enabled translate="label comment">
+                            <label>Import Orders</label>
+                            <frontend_type>select</frontend_type>
+                            <source_model>adminhtml/system_config_source_yesno</source_model>
+                            <sort_order>10</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>0</show_in_store>
+                        </enabled>
+                        <start_date translate="label comment">
+                            <label>Import Orders from</label>
+                            <frontend_type>text</frontend_type>
+                            <comment><![CDATA[Date (YYYY-MM-DD): older Faire orders are not imported. Set it to the go-live date.]]></comment>
+                            <sort_order>20</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>0</show_in_store>
+                        </start_date>
+                        <store translate="label comment">
+                            <label>Store View for Orders</label>
+                            <frontend_type>select</frontend_type>
+                            <source_model>ysrtech_faire/source_store</source_model>
+                            <comment><![CDATA[Its base currency is used; Faire amounts in another currency are converted with the currency rates.]]></comment>
+                            <sort_order>30</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>0</show_in_store>
+                        </store>
+                        <stores_by_currency translate="label comment">
+                            <label>Store Views by Currency</label>
+                            <frontend_type>textarea</frontend_type>
+                            <comment><![CDATA[Faire order currency => store view code, one per line, e.g. <strong>USD => us_en</strong>: orders in US dollars go to the US store view (its prices and currency). Other currencies: the store view above, amounts converted.]]></comment>
+                            <sort_order>35</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>0</show_in_store>
+                        </stores_by_currency>
+                        <customer_group translate="label comment">
+                            <label>Customer Group</label>
+                            <frontend_type>select</frontend_type>
+                            <source_model>ysrtech_faire/source_group</source_model>
+                            <sort_order>40</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>0</show_in_store>
+                        </customer_group>
+                        <no_tax translate="label comment">
+                            <label>No Tax on Faire Orders</label>
+                            <frontend_type>select</frontend_type>
+                            <source_model>adminhtml/system_config_source_yesno</source_model>
+                            <comment><![CDATA[Faire charges and remits the tax on its orders.]]></comment>
+                            <sort_order>50</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>0</show_in_store>
+                        </no_tax>
+                        <email translate="label comment">
+                            <label>Order Email</label>
+                            <frontend_type>text</frontend_type>
+                            <comment><![CDATA[Faire does not share the retailer's email; this address is on the orders (no emails are sent). Empty: the Sales email.]]></comment>
+                            <sort_order>60</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>0</show_in_store>
+                        </email>
+                        <auto_accept translate="label comment">
+                            <label>Accept Orders Automatically</label>
+                            <frontend_type>select</frontend_type>
+                            <source_model>adminhtml/system_config_source_yesno</source_model>
+                            <comment><![CDATA[New orders are confirmed on Faire (Processing) as soon as they are imported.]]></comment>
+                            <sort_order>70</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>0</show_in_store>
+                        </auto_accept>
+                        <ship_days translate="label comment">
+                            <label>Days to Ship</label>
+                            <frontend_type>text</frontend_type>
+                            <comment><![CDATA[Expected ship date given to Faire: business days after the order.]]></comment>
+                            <sort_order>80</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>0</show_in_store>
+                        </ship_days>
+                    </fields>
+                </orders>
+                <shipments translate="label">
+                    <label>Shipments</label>
+                    <sort_order>50</sort_order>
+                    <show_in_default>1</show_in_default>
+                    <show_in_website>1</show_in_website>
+                    <show_in_store>0</show_in_store>
+                    <fields>
+                        <enabled translate="label comment">
+                            <label>Send Tracking Numbers</label>
+                            <frontend_type>select</frontend_type>
+                            <source_model>adminhtml/system_config_source_yesno</source_model>
+                            <sort_order>10</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>0</show_in_store>
+                        </enabled>
+                        <carriers translate="label comment">
+                            <label>Carriers</label>
+                            <frontend_type>textarea</frontend_type>
+                            <comment><![CDATA[OpenMage carrier code => Faire carrier (UPS, FEDEX, USPS, CANADA_POST, PUROLATOR, CANPAR, DHL_EXPRESS, DHL_ECOMMERCE...), one per line. Others: the tracking title.]]></comment>
+                            <sort_order>20</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>0</show_in_store>
+                        </carriers>
+                    </fields>
+                </shipments>
+            </groups>
+        </ysrtech_faire>
+    </sections>
+</config>

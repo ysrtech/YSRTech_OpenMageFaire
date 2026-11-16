@@ -1,0 +1,155 @@
+<?xml version="1.0"?>
+<!--
+    YSRTech_Faire: sells a website's catalog on Faire (wholesale marketplace) through the Faire
+    External API v2 (https://www.faire.com/external-api/v2).
+      - products and variants pushed from OpenMage (names, descriptions, images, wholesale and
+        retail prices, case size); products flagged "Sell on Faire"
+      - stock levels by SKU, every 15 minutes
+      - Faire orders imported as OpenMage orders (payment "Faire", shipping "Faire"),
+        accepted on Faire, cancellations followed
+      - tracking numbers of OpenMage shipments sent back to Faire
+    Settings per website (each brand has its own Faire account).
+-->
+<config>
+    <modules>
+        <YSRTech_Faire>
+            <version>1.0.0</version>
+        </YSRTech_Faire>
+    </modules>
+    <global>
+        <models>
+            <ysrtech_faire>
+                <class>YSRTech_Faire_Model</class>
+                <resourceModel>ysrtech_faire_resource</resourceModel>
+            </ysrtech_faire>
+            <ysrtech_faire_resource>
+                <class>YSRTech_Faire_Model_Resource</class>
+                <entities>
+                    <product><table>ysrtech_faire_product</table></product>
+                    <order><table>ysrtech_faire_order</table></order>
+                    <shipment><table>ysrtech_faire_shipment</table></shipment>
+                </entities>
+            </ysrtech_faire_resource>
+        </models>
+        <blocks>
+            <ysrtech_faire>
+                <class>YSRTech_Faire_Block</class>
+            </ysrtech_faire>
+        </blocks>
+        <helpers>
+            <ysrtech_faire>
+                <class>YSRTech_Faire_Helper</class>
+            </ysrtech_faire>
+        </helpers>
+        <resources>
+            <ysrtech_faire_setup>
+                <setup>
+                    <module>YSRTech_Faire</module>
+                    <class>Mage_Catalog_Model_Resource_Setup</class>
+                </setup>
+            </ysrtech_faire_setup>
+        </resources>
+    </global>
+    <admin>
+        <routers>
+            <adminhtml>
+                <args>
+                    <modules>
+                        <YSRTech_Faire before="Mage_Adminhtml">YSRTech_Faire_Adminhtml</YSRTech_Faire>
+                    </modules>
+                </args>
+            </adminhtml>
+        </routers>
+    </admin>
+    <adminhtml>
+        <events>
+            <adminhtml_block_html_before>
+                <observers>
+                    <ysrtech_faire>
+                        <class>ysrtech_faire/observer</class>
+                        <method>addProductMassAction</method>
+                    </ysrtech_faire>
+                </observers>
+            </adminhtml_block_html_before>
+        </events>
+    </adminhtml>
+    <crontab>
+        <jobs>
+            <ysrtech_faire_orders>
+                <schedule><cron_expr>*/10 * * * *</cron_expr></schedule>
+                <run><model>ysrtech_faire/cron::orders</model></run>
+            </ysrtech_faire_orders>
+            <ysrtech_faire_inventory>
+                <schedule><cron_expr>*/15 * * * *</cron_expr></schedule>
+                <run><model>ysrtech_faire/cron::inventory</model></run>
+            </ysrtech_faire_inventory>
+            <ysrtech_faire_shipments>
+                <schedule><cron_expr>*/20 * * * *</cron_expr></schedule>
+                <run><model>ysrtech_faire/cron::shipments</model></run>
+            </ysrtech_faire_shipments>
+            <ysrtech_faire_products>
+                <schedule><cron_expr>43 1 * * *</cron_expr></schedule>
+                <run><model>ysrtech_faire/cron::products</model></run>
+            </ysrtech_faire_products>
+        </jobs>
+    </crontab>
+    <default>
+        <ysrtech_faire>
+            <api>
+                <enabled>0</enabled>
+                <auth>token</auth>
+                <api_url>https://www.faire.com/external-api/v2</api_url>
+            </api>
+            <catalog>
+                <wholesale_percent>50</wholesale_percent>
+                <retail_source>price</retail_source>
+                <case_size>1</case_size>
+                <minimum_quantity>1</minimum_quantity>
+                <publish>1</publish>
+            </catalog>
+            <inventory>
+                <enabled>1</enabled>
+                <buffer>0</buffer>
+                <unmanaged_qty>100</unmanaged_qty>
+            </inventory>
+            <orders>
+                <enabled>1</enabled>
+                <auto_accept>1</auto_accept>
+                <ship_days>3</ship_days>
+                <no_tax>1</no_tax>
+                <customer_group>2</customer_group>
+            </orders>
+            <shipments>
+                <enabled>1</enabled>
+                <carriers>ups => UPS
+fedex => FEDEX
+usps => USPS
+dhl => DHL_EXPRESS
+dhlint => DHL_EXPRESS
+canadapost => CANADA_POST
+purolator => PUROLATOR
+canpar => CANPAR
+clickship => CANADA_POST</carriers>
+            </shipments>
+        </ysrtech_faire>
+        <payment>
+            <ysrtechfaire>
+                <active>1</active>
+                <model>ysrtech_faire/payment_faire</model>
+                <title>Faire</title>
+                <!-- needed for initialize() to run; it only sets the order state (no capture) -->
+                <payment_action>authorize</payment_action>
+                <allowspecific>0</allowspecific>
+            </ysrtechfaire>
+        </payment>
+        <carriers>
+            <ysrtechfaire>
+                <active>1</active>
+                <model>ysrtech_faire/carrier_faire</model>
+                <title>Faire</title>
+                <name>Shipping arranged through Faire</name>
+                <sallowspecific>0</sallowspecific>
+            </ysrtechfaire>
+        </carriers>
+    </default>
+</config>
