@@ -73,7 +73,7 @@ retried up to 5 times on errors.
 
 ## Setup
 
-1. `composer require ysrtech/faire` (repository `https://github.com/ysrtech/YSRTech_Faire`).
+1. `composer require ysrtech/faire` (repository `https://github.com/ysrtech/YSRTech_OpenMageFaire`).
 2. System > Configuration > YSRTech > Faire, **website scope**: enable, paste the Faire access
    token (or OAuth app credentials), "Test Connection".
 3. Set the Faire product type, case size and wholesale pricing; "Import orders from" = go-live
